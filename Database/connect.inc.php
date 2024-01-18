@@ -10,6 +10,3 @@
 		die('<h3>* Could not connect to database right now.Please try again later.</h3>');
 	}
 ?>
-
-
-
