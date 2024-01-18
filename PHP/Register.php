@@ -173,7 +173,7 @@ if (
         <!-- Contact Details -->
         <h2>Contact Details</h2>
         <!-- <label for="mail_id">Mail ID:<span style="color: red;">*</span> </label> -->
-        <input type="email" id="email" name="email" placeholder="Email Id" required>
+        <input type="email" id="email" name="email" placeholder="Email Id" value="<?php echo  $_GET['email']; ?>" required readonly >
 
         <label for="mobile_number">Mobile Number:<span style="color: red;">*</span> </label>
         <div class="mobile-number-container">
