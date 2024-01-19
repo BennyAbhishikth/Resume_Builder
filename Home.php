@@ -1,6 +1,6 @@
 <?php
   require_once 'vendor/autoload.php';
-
+  require_once 'Database/connect.inc.php';
   // init configuration
   $clientID = '774690291785-hka7g7qtdocj294i4iq62qssr5jhsrcj.apps.googleusercontent.com';
   $clientSecret = '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';
@@ -40,19 +40,22 @@
     $birthday = $google_account_info->birthday;  // User's birthday
     $hd = $google_account_info->hd;  // Hosted domain (if using Google Apps)
 
-    if (0) {
+    $sql = "SELECT * FROM users where mail_id ='$email'";
+    $result = $con->query($sql);
+    $count = mysqli_num_rows($result);
+    if ($count==NULL) {
       // User is existing, log in the user
       // Implement your login logic here
       // For example, set a session or create a user session
       // echo "Existing User: $name is logged in.";
-      header("Location: update.php?email=" . urlencode($email));
+      header("Location: PHP/Register.php?email=" . urlencode($email));
       exit();
     } else {
       // User is new, create an account for the user
       // Implement your account creation logic here
       // For example, insert the user into your database
       // echo "New User: $name has been registered and logged in.";
-      header("Location: PHP/Register.php?email=" . urlencode($email));
+      header("Location: PHP/Update.php?email=" . urlencode($email));
       exit();
     }
 

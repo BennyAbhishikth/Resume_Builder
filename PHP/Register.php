@@ -8,125 +8,146 @@ if (
     isset($_POST['specialization']) && isset($_POST['degree_place']) && isset($_POST['degree_location']) && isset($_POST['degree_duration']) && isset($_POST['degree_cgpa']) && isset($_POST['s_secondary_name']) &&
     isset($_POST['s_specialization']) && isset($_POST['s_secondary_place']) && isset($_POST['s_secondary_location']) && isset($_POST['s_secondary_duration']) && isset($_POST['s_secondary_cgpa']) && isset($_POST['secondary_place']) && isset($_POST['secondary_location']) &&
     isset($_POST['secondary_duration']) && isset($_POST['secondary_cgpa']) && isset($_POST['skills']) && isset($_POST['certification_name']) && isset($_POST['certified_by']) &&
-    isset($_POST['project_name']) && isset($_POST['tasks']) && isset($_POST['tech']) && isset($_POST['project_link']) && isset($_POST['achievement']) && isset($_GET['email'])
+    isset($_POST['project_name']) && isset($_POST['tasks']) && isset($_POST['tech']) && isset($_POST['project_link']) && isset($_POST['achievement']) && isset($_GET['email'])&&isset($_POST['submit'])
 ) {
 
-    // $userid = $_GET['email'];
-
-    // personal Details 
-    $fname = $_POST['full_name'];
-    $designation = $_POST['designation'];
-    $profile_photo = $_POST['profile_photo'];
-
-    // contact details 
-    $email = $_POST['email'];
-    $country_code = $_POST['country_code'];
-    $mobile_number = $_POST['mobile_number'];
-    $address = $_POST['address'];
-
-    // profile links 
-    $linkedin = $_POST['linkedin'];
-    $github = $_POST['github'];
-    $codechef = $_POST['codechef'];
-    $leetcode = $_POST['leetcode'];
-    $hackerrank = $_POST['hackerrank'];
-    $hackerearth = $_POST['hackerearth'];
-
-    // about 
-    $career_objective = $_POST['career_objective'];
-
-    // education
-    $degree_name = $_POST['degree_name'];
-    $specialization = $_POST['specialization'];
-    $degree_place = $_POST['degree_place'];
-    $degree_duration = $_POST['degree_duration'];
-    $degree_location = $_POST['degree_location'];
-    $degree_cgpa = $_POST['degree_cgpa'];
-
-    $s_secondary_name = $_POST['s_secondary_name'];
-    $s_specialization = $_POST['s_specialization'];
-    $s_secondary_place = $_POST['s_secondary_place'];
-    $s_secondary_location = $_POST['s_secondary_location'];
-    $s_secondary_duration = $_POST['s_secondary_duration'];
-    $s_secondary_cgpa = $_POST['s_secondary_cgpa'];
-
-    $secondary_place = $_POST['secondary_place'];
-    $secondary_location = $_POST['secondary_location'];
-    $secondary_duration = $_POST['secondary_duration'];
-    $secondary_cgpa = $_POST['secondary_cgpa'];
-
-    // skills
-    $skills = $_POST['skills'];
-
-    // Certifications
-    $certification_name = $_POST['certification_name'];
-    $certified_by = $_POST['certified_by'];
-    $certification_year = $_POST['certification_year'];
-
-    // Projects
-    $project_name = $_POST['project_name'];
-    $tasks = $_POST['tasks'];
-    $tech = $_POST['tech'];
-    $project_link = $_POST['project_link'];
-
-    // Achievements
-    $achievement = $_POST['achievement'];
-
-    // Experience
-    $role = $_POST['role'];
-    $company = $_POST['company'];
-    $duration = $_POST['duration'];
-    $description = $_POST['description'];
-
-    $skillss = json_encode($skills);
-    $certification_names = json_encode($certification_name);
-    $certified_bys = json_encode($certified_by);
-    $certification_years = json_encode($certification_year);
-    $project_names = json_encode($project_name);
-    $taskss = json_encode($tasks);
-    $techs = json_encode($tech);
-    $project_links = json_encode($project_link);
-    $achievements = json_encode($achievement);
-    $roles = json_encode($role);
-    $companys = json_encode($company);
-    $durations = json_encode($duration);
-    $descriptions = json_encode($description);
-
-    // $query_signup = " INSERT INTO `users` VALUES('','$fname', '$designation', '$profile_photo', '$mail_id', '$country_code', '$mobile_number', 
-    //   '$address', '$linkedin', '$github', '$codechef', '$leetcode', '$hackerrank', '$hackerearth', '$career_objective', '$degree_name', '$specialization', 
-    //   '$degree_place', '$degree_duration', '$degree_cgpa', '$s_secondary_name', '$s_specialization', '$s_secondary_place', '$s_secondary_duration', '$s_secondary_cgpa', '$secondary_place', '$secondary_duration', 
-    //   '$secondary_cgpa', '$skillss', '$certification_names', '$certified_bys', '$certification_years', '$project_names', '$taskss', '$techs', '$project_links', '$achievements', 
-    //   '$roles', '$companys', '$durations', '$descriptions' ) ";
-
-    $sql = "SELECT * FROM users where mail_id ='$email'";
-    $result = $con->query($sql);
-    $count = mysqli_num_rows($result);
-    if ($count == NULL) {
-
-        $query_signup = "INSERT INTO `users` VALUES 
-        (
-            '$fname', '$designation', '$profile_photo', '$email', '$country_code', '$mobile_number', 
-            '$address', '$linkedin', '$github', '$codechef', '$leetcode', '$hackerrank', '$hackerearth', '$career_objective', 
-            '$degree_name', '$specialization', '$degree_place','$degree_location', '$degree_duration', '$degree_cgpa', 
-            '$s_secondary_name', '$s_specialization', '$s_secondary_place','$s_secondary_location', '$s_secondary_duration', '$s_secondary_cgpa', 
-            '$secondary_place','$secondary_duration', '$secondary_duration', '$secondary_cgpa', 
-            '$skillss', '$certification_names', '$certified_bys', '$certification_years', 
-            '$project_names', '$taskss', '$techs', '$project_links', '$achievements', 
-            '$roles', '$companys', '$durations', '$descriptions'
-        )";
-
-        $one = 1;
-        mysqli_query($con, $query_signup);
-        header("Location: resume.php?email=" . urlencode($email));
-        exit();
+    $img_name = $_FILES['profile_photo']['name'];
+    $img_size = $_FILES['profile_photo']['size'];
+    $tmp_name = $_FILES['profile_photo']['tmp_name'];
+    $error = $_FILES['profile_photo']['error'];
 
 
-    }
-    if ($one == 0) {
-        header("Location: resume.php?email=" . urlencode($email));
-        exit();
-    } else if ($count != NULL) {
-        echo "<h3 style ='position: absolute;top: 0%;' ><font color=\"red\">* Userid already registered.</font></h3>";
+
+
+    if ($error === 0) {
+        if ($img_size > 1048576) {
+            echo "File size should not be more than 1MB";
+        } else {
+            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+            $img_ex_lc = strtolower($img_ex);
+            $allowed_exs = array("jpg", "jpeg", "png");
+            if (in_array($img_ex_lc, $allowed_exs)) {
+                $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+                $img_upload_path = '../uploads/' . $new_img_name;
+                move_uploaded_file($tmp_name, $img_upload_path);
+
+
+
+
+                // $userid = $_GET['email'];
+
+                // personal Details 
+                $fname = $_POST['full_name'];
+                $designation = $_POST['designation'];
+                $profile_photo = $_POST['profile_photo'];
+
+                // contact details 
+                $email = $_POST['email'];
+                $country_code = $_POST['country_code'];
+                $mobile_number = $_POST['mobile_number'];
+                $address = $_POST['address'];
+
+                // profile links 
+                $linkedin = $_POST['linkedin'];
+                $github = $_POST['github'];
+                $codechef = $_POST['codechef'];
+                $leetcode = $_POST['leetcode'];
+                $hackerrank = $_POST['hackerrank'];
+                $hackerearth = $_POST['hackerearth'];
+
+                // about 
+                $career_objective = $_POST['career_objective'];
+
+                // education
+                $degree_name = $_POST['degree_name'];
+                $specialization = $_POST['specialization'];
+                $degree_place = $_POST['degree_place'];
+                $degree_duration = $_POST['degree_duration'];
+                $degree_location = $_POST['degree_location'];
+                $degree_cgpa = $_POST['degree_cgpa'];
+
+                $s_secondary_name = $_POST['s_secondary_name'];
+                $s_specialization = $_POST['s_specialization'];
+                $s_secondary_place = $_POST['s_secondary_place'];
+                $s_secondary_location = $_POST['s_secondary_location'];
+                $s_secondary_duration = $_POST['s_secondary_duration'];
+                $s_secondary_cgpa = $_POST['s_secondary_cgpa'];
+
+                $secondary_place = $_POST['secondary_place'];
+                $secondary_location = $_POST['secondary_location'];
+                $secondary_duration = $_POST['secondary_duration'];
+                $secondary_cgpa = $_POST['secondary_cgpa'];
+
+                // skills
+                $skills = $_POST['skills'];
+
+                // Certifications
+                $certification_name = $_POST['certification_name'];
+                $certified_by = $_POST['certified_by'];
+                $certification_year = $_POST['certification_year'];
+
+                // Projects
+                $project_name = $_POST['project_name'];
+                $tasks = $_POST['tasks'];
+                $tech = $_POST['tech'];
+                $project_link = $_POST['project_link'];
+
+                // Achievements
+                $achievement = $_POST['achievement'];
+
+                // Experience
+                $role = $_POST['role'];
+                $company = $_POST['company'];
+                $duration = $_POST['duration'];
+                $description = $_POST['description'];
+
+                $skillss = json_encode($skills);
+                $certification_names = json_encode($certification_name);
+                $certified_bys = json_encode($certified_by);
+                $certification_years = json_encode($certification_year);
+                $project_names = json_encode($project_name);
+                $taskss = json_encode($tasks);
+                $techs = json_encode($tech);
+                $project_links = json_encode($project_link);
+                $achievements = json_encode($achievement);
+                $roles = json_encode($role);
+                $companys = json_encode($company);
+                $durations = json_encode($duration);
+                $descriptions = json_encode($description);
+
+                // $query_signup = " INSERT INTO `users` VALUES('','$fname', '$designation', '$profile_photo', '$mail_id', '$country_code', '$mobile_number', 
+                //   '$address', '$linkedin', '$github', '$codechef', '$leetcode', '$hackerrank', '$hackerearth', '$career_objective', '$degree_name', '$specialization', 
+                //   '$degree_place', '$degree_duration', '$degree_cgpa', '$s_secondary_name', '$s_specialization', '$s_secondary_place', '$s_secondary_duration', '$s_secondary_cgpa', '$secondary_place', '$secondary_duration', 
+                //   '$secondary_cgpa', '$skillss', '$certification_names', '$certified_bys', '$certification_years', '$project_names', '$taskss', '$techs', '$project_links', '$achievements', 
+                //   '$roles', '$companys', '$durations', '$descriptions' ) ";
+
+                $sql = "SELECT * FROM users where mail_id ='$email'";
+                $result = $con->query($sql);
+                $count = mysqli_num_rows($result);
+                if ($count == NULL) {
+
+                    $query_signup = "INSERT INTO `users` VALUES 
+                    (
+                        '$fname', '$designation', '$new_img_name', '$email', '$country_code', '$mobile_number', 
+                        '$address', '$linkedin', '$github', '$codechef', '$leetcode', '$hackerrank', '$hackerearth', '$career_objective', 
+                        '$degree_name', '$specialization', '$degree_place','$degree_location', '$degree_duration', '$degree_cgpa', 
+                        '$s_secondary_name', '$s_specialization', '$s_secondary_place','$s_secondary_location', '$s_secondary_duration', '$s_secondary_cgpa', 
+                        '$secondary_place','$secondary_duration', '$secondary_duration', '$secondary_cgpa', 
+                        '$skillss', '$certification_names', '$certified_bys', '$certification_years', 
+                        '$project_names', '$taskss', '$techs', '$project_links', '$achievements', 
+                        '$roles', '$companys', '$durations', '$descriptions'
+                    )";
+
+                    $one = 1;
+                    mysqli_query($con, $query_signup);
+                    header("Location: ../Resumes/resume.php?email=" . urlencode($email));
+                    exit();
+                } else {
+                    echo $error;
+                }
+            }
+
+        }
     }
 
 }
@@ -147,7 +168,124 @@ if (
 
 <body onload="hid()">
 
-    <form action="" method="post">
+
+<div class="wrapper flex_align_justify" id="overlay">
+    <div class="terms_service">
+        <div class="tc_item tc_head flex_align_justify">
+            <div class="icon flex_align_justify">
+            <ion-icon name="terminal-outline"></ion-icon>
+            </div>
+            <div class="text">
+            <h2>TERMS OF SERVICE</h2>
+            <!-- <p>Last updated on September 12 2022</p> -->
+            </div>
+        </div>
+        <div class="tc_item tc_body">
+            <ol>
+            <li>
+                <h3>Data Collection and Storage:</h3>
+                <ul>
+                    <li>We collect and store the information you provide for the purpose of creating resumes.
+                    </li>
+                    <li>Your data will be treated confidentially and will not be shared with third parties without your consent.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Usage of Information:</h3>
+                <ul>
+                    <li>The collected data will only be used for creating resumes and will not be used for any other commercial purposes without your explicit consent.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Data Security:</h3>
+                <ul>
+                    <li>We implement security measures to protect your data from unauthorized access, disclosure, alteration, and destruction.
+                    </li>
+                    <li>However, we cannot guarantee the absolute security of your data.
+                    </li>
+                </ul>
+            </li>
+            
+            <li>
+                <h3>User Responsibilities:</h3>
+                <ul>
+                    <li>You are responsible for providing accurate and truthful information.</li>
+                    <li>Maintain the confidentiality of your account credentials.</li>
+                </ul>
+            </li>
+
+            
+            <li>
+                <h3>User Consent:</h3>
+                <ul>
+                    <li>By using our service, you explicitly consent to the terms and conditions outlined here.</li>
+                </ul>
+            </li>
+
+            
+            <li>
+                <h3>Disclaimer of Liability:</h3>
+                <ul>
+                    <li>We are not liable for any inaccuracies, errors, or omissions in the resumes created using our service.</li>
+                    <li>We are not responsible for any damages or losses resulting from the use of the service.</li>
+                </ul>
+            </li>
+
+           
+            <li>
+                <h3>Updates to Terms and Conditions:</h3>
+                <ul>
+                    <li>We reserve the right to update these terms and conditions.</li>
+                    <li>Changes will be effective upon posting, and you will be notified of any significant changes.</li>
+                </ul>
+            </li>
+
+            
+            <li>
+                <h3>Termination of Service:</h3>
+                <ul>
+                    <li>We reserve the right to terminate your access to the service under certain circumstances.</li>
+                    <li>You may request the deletion of your data, subject to our policies.</li>
+                </ul>
+            </li>
+
+          
+            <li>
+                <h3>Intellectual Property:</h3>
+                <ul>
+                    <li>All intellectual property associated with the service, including code and design, is owned by us.</li>
+                </ul>
+            </li>
+
+        
+            <li>
+                <h3>Dispute Resolution:</h3>
+                <ul>
+                    <li>Any disputes will be resolved through [choose method: arbitration, mediation, legal action].</li>
+                </ul>
+            </li>
+
+            
+            <p>By using our service, you acknowledge that you have read and understood these terms and conditions. If you do not agree, please refrain from using our service.</p>
+
+            
+            </ol>
+        </div>
+        <div class="tc_item tc_foot flex_align">
+            <button class="decline_btn" onclick="decline()">Decline</button>
+            <button class="accept_btn" onclick="agree()" >Accept</button>
+
+           
+            <!-- <a href="Main.php"><button class="accept_btn" >Accept</button></a> -->
+        </div>
+    </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+    <form  id="form-container"  action="" method="post">
         <div id="header">
             <center>
                 <h1 style="color: antiquewhite;">Technical Resume Form</h1>
@@ -173,7 +311,8 @@ if (
         <!-- Contact Details -->
         <h2>Contact Details</h2>
         <!-- <label for="mail_id">Mail ID:<span style="color: red;">*</span> </label> -->
-        <input type="email" id="email" name="email" placeholder="Email Id" value="<?php echo  $_GET['email']; ?>" required readonly >
+        <input type="email" id="email" name="email" placeholder="Email Id" value="<?php echo $_GET['email']; ?>"
+            required readonly>
 
         <label for="mobile_number">Mobile Number:<span style="color: red;">*</span> </label>
         <div class="mobile-number-container">
@@ -273,7 +412,7 @@ if (
         <span id="career-objective-count">750 characters remaining</span><br>
         <button class="helpButton" type="button" name="button">Help</button>
 
-        <div class="cont">
+        <div class="cont" id="cont" >
             <div class="item1">
                 <input type="radio" onclick="add1()" name="but1" value="">
                 <div class="matter1">
@@ -661,11 +800,35 @@ if (
             </div>
         </div>
 
-
-        <center><a href=""><button type="submit">Submit</button></a></center>
+        <!-- <button style="background-color: white;" ></button> -->
+        <p>Click Submit </p>
+        <!-- <center><a href=""><button type="submit">Submit</button></a></center> -->
+        <center><input style="width:20%;margin-left:40%;background-color: rgb(20, 176, 20);margin-top:-35px" type="submit" name="submit" value="Submit" id="button" ></center>
     </form>
 
+    <script>
+            // document.getElementById("form-container").style.display = "block";
+    
+  function showPopup() {
+    document.getElementById("overlay").style.display = "flex";
+    // document.getElementById("form-container").style.display = "none";
+    }
 
+    function closePopup() {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("form-container").style.display = "block";
+    }
+
+    function agree() {
+        closePopup();
+    }
+
+    function decline() {
+        window.location.href = "http://localhost:8080/CraftingCareers/Home.php"; // Redirect to decline page
+    }
+    // Show the popup when the page loads
+    window.onload = showPopup;
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../JS/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>

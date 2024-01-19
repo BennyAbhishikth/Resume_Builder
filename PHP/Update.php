@@ -22,7 +22,7 @@
                 if(in_array($img_ex_lc, $allowed_exs ))
                 {
                     $new_img_name = uniqid("IMG-", true). '.' .$img_ex_lc;
-                    $img_upload_path = 'uploads/'. $new_img_name;
+                    $img_upload_path = '../uploads/'. $new_img_name;
                     move_uploaded_file($tmp_name,$img_upload_path );
 
                     // personal Details 
@@ -117,7 +117,7 @@
                       mysqli_query( $con, $query_delete );
 
                       $query_signup = "INSERT INTO `users` VALUES (
-                          '$fname', '$designation', '$profile_photo', '$email', '$country_code', '$mobile_number', 
+                          '$fname', '$designation', '$new_img_name', '$email', '$country_code', '$mobile_number', 
                           '$address', '$linkedin', '$github', '$codechef', '$leetcode', '$hackerrank', '$hackerearth', '$career_objective', 
                           '$degree_name', '$specialization', '$degree_place','$degree_location', '$degree_duration', '$degree_cgpa', 
                           '$s_secondary_name', '$s_specialization', '$s_secondary_place','$s_secondary_location', '$s_secondary_duration', '$s_secondary_cgpa', 
@@ -129,7 +129,7 @@
                       
                       
                       mysqli_query( $con, $query_signup );
-                      header("Location: resume.php?email=" . urlencode($email));
+                      header("Location: ../Resumes/resume.php?email=" . urlencode($email));
                       exit();
 
 
@@ -205,7 +205,7 @@
         $s_secondary_name1 = $row['senior_secondary_name'];
         $s_specialization1 = $row['senior_secondary_specialization'];
         $s_secondary_place1 = $row['senior_secondary_place'];
-        $s_secondary_location1 = $row['s_secondary_location'];
+        $s_secondary_location1 = $row['senior_secondary_location'];
 
         $s_secondary_duration1 = $row['senior_secondary_duration'];
         $s_secondary_cgpa1 = $row['senior_secondary_gpa'];
@@ -237,7 +237,7 @@
 </head>
 <body onload="hid()">
 
-  <form  action="update.php" method="post" enctype="multipart/form-data" >
+  <form id="form-container"  action="update.php" method="post" enctype="multipart/form-data" >
   <!-- enctype='multipart/form-data' -->
     <div id="header">
       <center><h1>Update Resume Form</h1></center>
@@ -935,10 +935,15 @@
     
     <!-- <input type="submit" name="submit" value="Submit" id="button" > -->
     <!-- <a href=""><button type="submit">Submit</button></a> -->
-    <center><a href=""><button type="submit">Submit</button></a></center>
+    <!-- <button style="background-color: white;" type="submit"></button> -->
+    <p>Click Submit </p>
+
+    <center><input style="width:20%;margin-left:40%;background-color: rgb(20, 176, 20);margin-top:-35px" type="submit" name="submit" value="Submit" id="button" ></center>
 
   </form>
-
+  <script>
+     document.getElementById("form-container").style.display = "block";
+  </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="../JS/script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>

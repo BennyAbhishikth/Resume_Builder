@@ -1,3 +1,6 @@
+
+
+
 // Skills Section
 let skillCount = 1; // Initial skill count
 function addSkill()
@@ -342,7 +345,8 @@ function updateCharacterCount(inputId, countId)
     countSpan.textContent = `${remainingCharacters} characters remaining`;
 }
 
-
+  
+  document.getElementById("cont").hide();
 
   $(".helpButton").click(function(){
       $(".cont").slideToggle();
@@ -439,3 +443,5 @@ function updateCharacterCount(inputId, countId)
   function clr(){
     $("#career_objective").text(clear);
   }
+
+
